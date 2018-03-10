@@ -5,7 +5,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="javascripts/jquery-1.9.0.min.js"></script>
+    <!--<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>-->
     <script src="javascripts/jquery.knob.min.js"></script>
+    <script type="text/javascript" src="javascripts/admin.js"></script>
+
+    <!-- websocket adapter library -->
+    <script src="javascripts/websock/base64.js"></script>
+    <script src="javascripts/websock/util.js"></script>
+    <script src="javascripts/websock/websock.js"></script>
+    <!--<script src="javascripts/jquery-1.10.2.min.js"></script>-->
+    <script src="javascripts/mpd.js"></script>
+    <script src="javascripts/UI.js"></script>
 
     <!-- Le styles -->
 

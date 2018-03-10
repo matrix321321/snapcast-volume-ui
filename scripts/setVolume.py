@@ -19,12 +19,14 @@ def doRequest( j, requestId ):
 				return jResponse;
 	return;
 
-def setVolume(client, volume):
+def setVolume(client, percent, muted):
 	global requestId
-	doRequest(json.dumps({'jsonrpc': '2.0', 'method': 'Client.SetVolume', 'params': {'client':  client, 'volume': volume}, 'id': requestId}), requestId)
+	doRequest(json.dumps({'jsonrpc': '2.0', 'method': 'Client.SetVolume', 'params': {'client':  client,  'volume': {'muted': muted, 'percent': percent }}, 'id': requestId}), requestId)
+	#doRequest(json.dumps({'id': requestId, 'jsonrpc': '2.0', 'method': 'Client.SetVolume', 'params': {'client':  client,  'volume': {'muted': muted, 'percent': volume }}), requestId)
 	requestId = requestId + 1
 
-volume = int(sys.argv[2])
-setVolume(sys.argv[1], volume)
+percent = int(sys.argv[2])
+muted = sys.argv[3]
+setVolume(sys.argv[1], percent, muted)
 
 telnet.close

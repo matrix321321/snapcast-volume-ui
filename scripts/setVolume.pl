@@ -1,13 +1,14 @@
 #!/usr/bin/env perl
 
-my $snapserver = q{mezza.pi.eboxr.com};
-my $port       = 1705;
+my $snapserver = '127.0.0.1';
+my $port       = '1705';
 
-my $client = q{b8:27:eb:27:f6:c4};
-my $volume = 100;
+my $client = 'pizero';
+my $percent = '100';
+my $muted = '1';
 
 my $req = {'jsonrpc' => '2.0', 'method' => 'Client.SetVolume', 
-	'params' => {'client' =>  $client, 'volume' => $volume}, 
+	'params' => {'client' =>  $client, 'volume'=> {'muted' => $muted, 'percent' => $percent}}, 
 	'id' => 1 # request id
 };
 

@@ -41,29 +41,34 @@ get '/' => sub {
             clientid => $clientid,
             color    => $cfgrooms->{$clientid}->{color} // $DEFAULT_COLORS[ ( $roomnumber - 2 ) % ( $#DEFAULT_COLORS + 1 ) ],
             value    => $cli->{volume},
+            muteval  => $cli->{muted}
+
           };
     }
     @rooms = sort { lc( $a->{name} ) cmp lc( $b->{name} ) } @rooms;
     template 'index', { rooms => \@rooms };
 };
 
-get '/api/setsound/:room/:volume' => sub {
+get '/api/setsound/:room/:muted/:percent' => sub {
     header 'Content-Type' => 'application/json';
 
     my $room   = param('room');
-    my $volume = param('volume');
+    my $percent = param('percent');
+    my $muted = param('muted');
+    
 
     my $error;
-    $error = "Invalid volume" if $volume !~ qr{^[0-9]+$} or $volume > 100;
+    $error = "Invalid volume" if $percent !~ qr{^[0-9]+$} or $percent > 100;
 
     my $reply;
     if ( !$error ) {
-        $reply = $SNAPCAST->set_volume( $room, $volume );
-        $error = "Volume queries failed" unless exists $reply->{'result'}{'volume'}{'percent'} && $reply->{'result'}{'volume'}{'percent'} == $volume;
+        $reply = $SNAPCAST->set_volume( $room, $muted, $percent);
+
+        $error = "Volume queries failed" unless exists $reply->{'result'}{'volume'}{'percent'} && $reply->{'result'}{'volume'}{'percent'} == $percent;
     }
 
     return to_json { status => 0, msg => $error } if $error;
-    return to_json { status => 1, msg => "OK: $room - :$volume:",
+    return to_json { status => 1, msg => "OK: $room - :$muted:- :$percent: ",
         debug => $reply };
 };
 
@@ -147,7 +152,8 @@ get '/api/setsound/:room/:volume' => sub {
                 next if !$client->{connected}; # Ignore disconnected clients
                 push @clients,
                   {
-                    clientid => $client->{'id'},
+                    clientid => $client->{'id'},            
+                    muted    => $client->{'config'}{'volume'}{'muted'},
                     volume   => $client->{'config'}{'volume'}{'percent'}
                   };
             }
@@ -159,22 +165,24 @@ get '/api/setsound/:room/:volume' => sub {
     }
 
     sub set_volume {
-        my ( $self, $clientid, $volume ) = @_;
 
+        
+        my ( $self, $clientid, $muted, $volume ) = @_;
         my $results = $self->do_request(
             {
+                
                 'jsonrpc' => '2.0',
                 'method'  => 'Client.SetVolume',
-                'params'  => { 'id' => $clientid, 'volume' => { 'percent' => int($volume) } },
+                'params'  => { 'id' => $clientid, 'volume' => { 'muted' => $muted, 'percent' => int($volume) } },
 
-                #'id' => 1 # request id
+
+                'id' => 1 # request id
             }
         );
 
-        #print Dumper $results;
+        print Dumper $results;
         return $results;
     }
-
 }
 
 true;

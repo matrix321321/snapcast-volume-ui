@@ -1,7 +1,7 @@
 <script>
 function setsound(room, muted, level) {
   
-  console.log('startjQuery: '+ room +' '+ level+ ' ' +muted  );
+  //console.log('startjQuery: '+ room +' '+ level+ ' ' +muted  );
     jQuery.get('/api/setsound/'+encodeURIComponent(room)+'/'+muted+'/' +level, function(data) {
       console.log('setsoundfunction: ' + data);
     //$("#msg").html(data["text"]);
@@ -75,7 +75,7 @@ function set_all_rooms_to(level) {
                 }
                 console.log("mute " + "<%= room.id %> "+this.value);
                 muteisset<%= room.id %> = this.value;
-                //setsound("<%= room.clientid %>",{}, this.value);
+                setsound("<%= room.clientid %>", this.value,"<%= room.value %>");
               };
             }
   

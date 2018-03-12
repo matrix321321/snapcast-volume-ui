@@ -19,14 +19,21 @@ def doRequest( j, requestId ):
 				return jResponse;
 	return;
 
-def setVolume(client, percent, muted):
+def setVolume(client, percent):
 	global requestId
-	doRequest(json.dumps({'jsonrpc': '2.0', 'method': 'Client.SetVolume', 'params': {'client':  client,  'volume': {'muted': muted, 'percent': percent }}, 'id': requestId}), requestId)
+	doRequest(json.dumps({'jsonrpc': '2.0', 'method': 'Client.SetVolume', 'params': {'client':  client,  'volume': {'percent': percent }}, 'id': requestId}), requestId)
+	#doRequest(json.dumps({'id': requestId, 'jsonrpc': '2.0', 'method': 'Client.SetVolume', 'params': {'client':  client,  'volume': {'muted': muted, 'percent': volume }}), requestId)
+	requestId = requestId + 1
+
+def setMute(client, muted):
+	global requestId
+	doRequest(json.dumps({'jsonrpc': '2.0', 'method': 'Client.SetVolume', 'params': {'client':  client,  'volume': {'muted': muted }}, 'id': requestId}), requestId)
 	#doRequest(json.dumps({'id': requestId, 'jsonrpc': '2.0', 'method': 'Client.SetVolume', 'params': {'client':  client,  'volume': {'muted': muted, 'percent': volume }}), requestId)
 	requestId = requestId + 1
 
 percent = int(sys.argv[2])
-muted = sys.argv[3]
-setVolume(sys.argv[1], percent, muted)
+muted = bool(sys.argv[3])
+setVolume(sys.argv[1], percent)
+setMute(sys.argc[1],muted)
 
 telnet.close

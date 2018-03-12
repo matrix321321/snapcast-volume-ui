@@ -8,7 +8,12 @@ my $percent = '100';
 my $muted = '1';
 
 my $req = {'jsonrpc' => '2.0', 'method' => 'Client.SetVolume', 
-	'params' => {'client' =>  $client, 'volume'=> {'muted' => $muted, 'percent' => $percent}}, 
+	'params' => {'client' =>  $client, 'volume'=> {'percent' => $percent}}, 
+	'id' => 1 # request id
+};
+
+my $req1 = {'jsonrpc' => '2.0', 'method' => 'Client.SetMute', 
+	'params' => {'client' =>  $client, 'volume'=> {'muted' => $muted}}, 
 	'id' => 1 # request id
 };
 
@@ -17,16 +22,20 @@ use Net::Telnet;
 use Data::Dumper;
 
 my $json = JSON::XS->new->utf8->encode( $req );
+my $json1 = JSON::XS->new->utf8->encode( $req1 );
 
 $t = Net::Telnet->new(Timeout => 10, Prompt => "/\n/" );
 $t->open(Host => $snapserver, Port => $port) or die;
 
 my ($reply) = $t->cmd($json . "\r\n");
+my ($reply1) = $t->cmd($json1 . "\r\n");
 
 my $results = JSON::XS->new->utf8->decode( $reply );
+my $results1 = JSON::XS->new->utf8->decode( $reply1 );
 $t->close;
 
 print Dumper($results);
+print Dumper($results1);
 
 # http://www.hongkiat.com/blog/jquery-volumn-slider/
 # http://loopj.com/jquery-simple-slider/

@@ -41,7 +41,7 @@ get '/' => sub {
             clientid => $clientid,
             color    => $cfgrooms->{$clientid}->{color} // $DEFAULT_COLORS[ ( $roomnumber - 2 ) % ( $#DEFAULT_COLORS + 1 ) ],
             value    => $cli->{volume},
-            muteval  => $cli->{muted}
+            muteval  => $cli->{muted},
 
           };
     }
@@ -61,8 +61,10 @@ get '/api/setsound/:room/:muted/:percent' => sub {
     $error = "Invalid volume" if $percent !~ qr{^[0-9]+$} or $percent > 100;
 
     my $reply;
+    my $reply1;
+
     if ( !$error ) {
-        $reply = $SNAPCAST->set_volume( $room, $muted, $percent);
+        $reply = $SNAPCAST->set_volume( $room,  $muted, $percent);
 
         $error = "Volume queries failed" unless exists $reply->{'result'}{'volume'}{'percent'} && $reply->{'result'}{'volume'}{'percent'} == $percent;
     }
@@ -78,10 +80,17 @@ get '/api/setsound/:room/:muted/:percent' => sub {
     package SnapcastQueries;
 
     use JSON::XS;
+    #use JSON;
     use Net::Telnet;
     use Data::Dumper;
-
     use Simple::Accessor qw{config hostname port};
+    use strict;
+ #   use constant { #real true false, compatible with encode_json decode_json for later (we don't want field:false... will be field:0...)
+ #               eTRUE  =>  bless( do{\(my $o = 1)}, 'JSON::PP::Boolean' ),
+ #               eFALSE =>  bless( do{\(my $o = 0)}, 'JSON::PP::Boolean' )
+ #            };
+
+
 
     sub _build_hostname {
         my $cfg = $_[0]->config();
@@ -127,6 +136,11 @@ get '/api/setsound/:room/:muted/:percent' => sub {
 
         my $t = Net::Telnet->new( Timeout => 10, Prompt => "/\n/" );
         $t->open( Host => $snapserver, Port => $port ) or die;
+        
+        #String conversion for Mute
+        $json =~ s/"true"/true/ig;
+        $json =~ s/"false"/false/ig;
+
         my ($reply) = $t->cmd( $json . "\r\n" );
         $t->close;
 
@@ -142,6 +156,10 @@ get '/api/setsound/:room/:muted/:percent' => sub {
 
         my $results = $self->do_request(
             { 'jsonrpc' => '2.0', 'method' => 'Server.GetStatus' } );
+            
+            #print Dumper $results;
+
+
         die "No clients connected to server"
           unless ref $results->{result}{server}{groups}
           && scalar @{ $results->{result}{server}{groups} };
@@ -154,7 +172,7 @@ get '/api/setsound/:room/:muted/:percent' => sub {
                   {
                     clientid => $client->{'id'},            
                     muted    => $client->{'config'}{'volume'}{'muted'},
-                    volume   => $client->{'config'}{'volume'}{'percent'}
+                    volume   => $client->{'config'}{'volume'}{'percent'},
                   };
             }
         }
@@ -180,7 +198,7 @@ get '/api/setsound/:room/:muted/:percent' => sub {
             }
         );
 
-        print Dumper $results;
+        #print Dumper $results;
         return $results;
     }
 }

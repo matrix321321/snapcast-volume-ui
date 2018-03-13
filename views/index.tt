@@ -149,13 +149,24 @@ function set_all_rooms_to(level) {
 </div> <!-- /container -->
 
 
+<div id="footerwrap">
+    <footer class="clearfix"></footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-lg-12">
+          <p>Snapcast Advanced WebUI at <a href="https://github.com/matrix321321/snapcast-volume-ui" target="_blank">github</a> by matrix321321 forked from atoomic at <a href="https://github.com/atoomic/snapcast-volume-ui" target="_blank">github</a>
+          using sockify and MPD library at <a href="https://github.com/bobboau/MPD.js/tree/master">bobboau</a> and blocks theme from <a href="http://Alvarez.is">Alvarez.is</a><i> powered by <a href="http://perldancer.org/">Perl Dancer</a></p>
+        </div>
+      </div><!-- /row -->
+    </div><!-- /container -->
+</div><!-- /footerwrap -->
 
 <!-- Blocks Dashboard Theme - Crafted With Love - Copyright 2013 -->
 <!-- Le javascript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script type="text/javascript" src="javascripts/admin.js"></script>
 <script type="text/javascript" src="javascripts/bootstrap.js"></script>
 <script type="text/javascript" src="javascripts/lineandbars.js"></script>
+
 
 

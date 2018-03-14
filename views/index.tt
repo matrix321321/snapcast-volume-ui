@@ -167,6 +167,7 @@ function set_all_rooms_to(level) {
 <!-- Placed at the end of the document so the pages load faster -->
 <script type="text/javascript" src="javascripts/bootstrap.js"></script>
 <script type="text/javascript" src="javascripts/lineandbars.js"></script>
+<script type="text/javascript" src="javascripts/admin.js"></script>
 
 
 

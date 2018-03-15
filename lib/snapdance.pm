@@ -138,8 +138,12 @@ get '/api/setsound/:room/:muted/:percent' => sub {
         $t->open( Host => $snapserver, Port => $port ) or die;
         
         #String conversion for Mute
-        $json =~ s/"true"/true/ig;
-        $json =~ s/"false"/false/ig;
+        $json =~ s/"muted":"true"/"muted":true/ig;
+        $json =~ s/"muted":"false"/"muted":false/ig;
+        $json =~ s/"muted":"0"/"muted":false/ig;
+        $json =~ s/"muted":"1"/"muted":true/ig;
+
+        print Dumper $json;
 
         my ($reply) = $t->cmd( $json . "\r\n" );
         $t->close;
@@ -157,7 +161,7 @@ get '/api/setsound/:room/:muted/:percent' => sub {
         my $results = $self->do_request(
             { 'jsonrpc' => '2.0', 'method' => 'Server.GetStatus' } );
             
-            #print Dumper $results;
+            
 
 
         die "No clients connected to server"

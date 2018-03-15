@@ -53,20 +53,40 @@ function set_all_rooms_to(level) {
           <input id="i<%= room.id %>" class="<%= room.id %>" data-width="200" data-min="0" data-fgColor="<%= room.color %>" data-max="100" value="<%= room.value %>">
         </div>
 
-        <div class="switch switch-blue">
+<script>
+function Invert(id1,id2,muteval) {
+    if(muteval=="0")
+    {
+		document.getElementById(id1).checked=true;
+        return true;
+    }
+    else
+    {
+		document.getElementById(id2).checked=true;
+        return false;
+    }
+}
+</script>
+
+<div class="switch switch-blue">
             <form name="myForm<%= room.id %>">
-            <input type="radio" class="switch-input" name="myRadios" value="false" id="on<%= room.id %>" checked="">
-            <label for="on<%= room.id %>" class="switch-label switch-label-off">On</label>
-            <input type="radio" class="switch-input" name="myRadios" value="true" id="off<%= room.id %>">
-            <label for="off<%= room.id %>" class="switch-label switch-label-on">Mute</label>
+            <input type="radio" class="switch-input" name="myRadios" value="false" id="<%= room.clientid %>false" >
+            <label for="<%= room.clientid %>false" class="switch-label switch-label-off">OnAir</label>
+            <input type="radio" class="switch-input" name="myRadios"  value="true" id="<%= room.clientid %>true">
+            <label for="<%= room.clientid %>true" class="switch-label switch-label-on">Mute</label>
             <span class="switch-selection"> </span>
           </form>
         </div>
 
         <script>
+            Invert("<%= room.clientid %>false","<%= room.clientid %>true","<%= room.muteval %>");
+        </script>
+
+        <script>
             var rad = document.myForm<%= room.id %>.myRadios;
-            var prev<%= room.id %> = null;
-            var muteisset<%= room.id %> = null;
+            var prev<%= room.id %> = "<%= room.muteval %>";
+            var muteisset<%= room.id %> = "<%= room.muteval %>";
+
             for(var i = 0; i < rad.length; i++) {
             rad[i].onclick = function() {
             (prev<%= room.id %>)? console.log("previous mute "+"<%= room.id %> "+prev<%= room.id %>.value):null;

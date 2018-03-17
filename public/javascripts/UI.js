@@ -36,7 +36,26 @@ var UI = (function(){
     /*******************\
     |* private methods *|
     \*******************/
-
+    
+       function fancyTimeFormat(time)
+       {   
+           // Hours, minutes and seconds
+           var hrs = ~~(time / 3600);
+           var mins = ~~((time % 3600) / 60);
+           var secs = time % 60;
+       
+           // Output like "1:01" or "4:03:59" or "123:03:59"
+           var ret = "";
+       
+           if (hrs > 0) {
+               ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+           }
+       
+           ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+           ret += "" + secs;
+           return ret;
+       }
+       
     /**
      * update our UI on a state change
      */
@@ -49,20 +68,15 @@ var UI = (function(){
         if(current_song){
             $('.MPD_cur_song_title').html(current_song.getDisplayName());
             $('.MPD_cur_song_artist').html(current_song.getArtist());
-            $('.MPD_cur_song_duration').html(current_song.getDuration());
-           
+            $('.MPD_cur_song_duration').html(fancyTimeFormat(current_song.getDuration()));     
             $('.MPD_cur_song_id').val(current_song.getId());
             //there is a mix of div/span/td type html and input/select typeelements
-            $('.MPD_cur_song_elapsed_time').not(':input').html(Math.round(client.getCurrentSongTime()));
+            $('.MPD_cur_song_elapsed_time').not(':input').html(fancyTimeFormat(Math.round(client.getCurrentSongTime())));
             $('.MPD_cur_song_elapsed_time').filter(':input').val(client.getCurrentSongTime());
-            $('input[type=range].MPD_cur_song_elapsed_time').prop('max',current_song.getDuration());
+            $('input[type=range].MPD_cur_song_elapsed_time').prop('max',current_song.getDuration());            
         }
     }
-
-
     
-
-
     /**
      * update our UI on a Queue change
      */
@@ -93,7 +107,7 @@ var UI = (function(){
         var current_song = client.getCurrentSong();
         if(current_song){
             //there is a mix of div/span/td type html and input/select typeelements
-            $('.MPD_cur_song_elapsed_time').not(':input').html(Math.round(client.getCurrentSongTime()));
+            $('.MPD_cur_song_elapsed_time').not(':input').html(fancyTimeFormat(Math.round(client.getCurrentSongTime())));
             $('.MPD_cur_song_elapsed_time').filter(':input').val(client.getCurrentSongTime());
         }
     }
@@ -458,4 +472,4 @@ var UI = (function(){
         fileListClick:fileListClick,
         addSong:addSong
     };
-})();
+}());

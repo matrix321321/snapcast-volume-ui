@@ -16,6 +16,8 @@ function set_all_rooms_to(level) {
   <%END%>
 }
 
+
+
 </script>
 <!-- http://anthonyterrien.com/knob/ -->
 <!-- NAVIGATION MENU -->
@@ -66,6 +68,8 @@ function Invert(id1,id2,muteval) {
         return false;
     }
 }
+
+
 </script>
 
 <div class="switch switch-blue">
@@ -110,6 +114,15 @@ function Invert(id1,id2,muteval) {
     </div>
     <% END %>
 
+     <!-- GAUGE CHART BLOCK    
+		<div class="col-sm-3 col-lg-3">
+			<div class="dash-unit">
+	      		<dtitle>Gauge Chart</dtitle>
+	      		<hr>
+				<canvas id="canvas" width="300" height="300">
+			</canvas></div>
+		</div>   --> 
+
       <!-- LOCAL TIME BLOCK -->
       <div class="col-sm-3 col-lg-3">
         <div class="half-unit">
@@ -143,8 +156,16 @@ function Invert(id1,id2,muteval) {
           <dtitle>NOW PLAYING</dtitle>
           <hr>   
           <div class="cont">
-           (<span class="MPD_cur_song_elapsed_time"></span>s/<span class="MPD_cur_song_duration"></span>s)
-          </div>
+           <span class="MPD_cur_song_elapsed_time"></span>/<span class="MPD_cur_song_duration"></span>       
+           
+           <!-- <div class="progress"> -->
+				       <!-- <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:100%;">    -->    
+				         </br></br>
+                <span colspan="2">
+                        <input type="range"  class="MPD_cur_song_elapsed_time" oninput="UI.seek(this);" onchange="UI.seek(this);" min="0" max="0"/>
+                    </span>
+                <!--</div>-->
+         <!-- </div> -->
             <hr>
           <div class="cont">
               <div class="MPD MPD_client">
@@ -160,10 +181,7 @@ function Invert(id1,id2,muteval) {
             <input type="button" class="btn btn-primary" value="Next" onclick="UI.next(this);" />
           </div> 
         <br>
-        </div>
-       
-          
-         
+        </div>        
     </div> 
   </div><!-- /row -->
 </div> <!-- /container -->
@@ -188,6 +206,8 @@ function Invert(id1,id2,muteval) {
 <script type="text/javascript" src="javascripts/bootstrap.js"></script>
 <script type="text/javascript" src="javascripts/lineandbars.js"></script>
 <script type="text/javascript" src="javascripts/admin.js"></script>
+<script type="text/javascript" src="javascripts/gauge.js"></script>
+
 
 
 
